@@ -384,51 +384,6 @@
                 alert("An error occurred while generating the PDF. Please check the console for details.");
             }
         });
-
-        // --- INITIAL DATA SETUP ---
-        window.onload = () => {
-            const educationData = [
-                ["Polytechnic University of the Philippines - Sta. Mesa, Manila", "Diploma in Computer Engineering Technology", "2022-2025"],
-                ["Asian Institute of Computer Studies - Montalban, Rizal", "Information and Communication Technology", "2020-2022"],
-                ["Kasiglahan Village National High School", "Junior High School", "2016-2020"]
-            ];
-            educationData.forEach(data => setFieldValues(addField('education-fields', ['School Name', 'Degree/Course', 'Year']), data));
-
-            const experienceData = [
-                ["Senior Graphic Designer", "ICPEP Student Edition - PUP Manila", "December 2024 - Present", "Working with the design of visual materials for organizational events, publications, and online platforms. Develop creative concepts and execute designs for a variety of media."],
-                ["UI/UX Cadet", "Google Developer Student Clubs - PUP", "November 2024 - Present", "Contributed to the design and development of user interfaces and user experiences for club projects. Collaborated with developers to create intuitive and visually appealing digital solutions."],
-                ["Risk Management Information Security Group (RMISG) Intern", "Universal Storefront Services Corporation", "March 2025- May 2025", "Gained hands-on experience in cybersecurity fundamentals, including threat landscapes and security policy implementation. Deployed and secured an Ubuntu Server, configuring UFW firewall rules and implementing fail2ban for SSH protection."],
-                ["Web Development Intern", "iBuild.PH Web Solutions & Services", "July 2024-September 2024", "Contributed to web design and development projects, focusing on creating user-friendly websites. Designed website layouts, implemented features, and optimized sites for search engines (SEO) to improve visibility."]
-            ];
-            experienceData.forEach(data => setFieldValues(addField('experience-fields', ['Job Title', 'Company', 'Duration', { placeholder: 'Description...', type: 'textarea' }]), data));
-
-            const skillsData = [
-                ["Programming", "HTML, CSS, JavaScript, Bootstrap, Tailwind, Java, Python, SQL"],
-                ["Cybersecurity", "Vulnerability Assessment, Penetration Testing, Network Security, Firewall Configuration (UFW), Intrusion Detection (fail2ban), SIEM (Flare), Security Tools (Crowdstrike, Kaspersky, WP Scan, OpenVAS)"],
-                ["Applications", "Adobe Photoshop, Adobe Illustrator, Figma, Visual Studio Code, Eclipse IDE, Canva, Capcut"],
-                ["Platforms", "Windows, Linux, iOS"]
-            ];
-            skillsData.forEach(data => setFieldValues(addField('skills-fields', ['Category', 'Skills'], false), data));
-
-            const honorsData = [
-                ["TESDA National Certificate II in Computer Systems Servicing (CSS)"],
-                ["President Lister | Polytechnic University of the Philippines (Multiple Semesters)"]
-            ];
-            honorsData.forEach(data => setFieldValues(addField('honors-fields', ['Honor or Award'], false), data));
-
-            const languagesData = [
-                ["Tagalog", "Native"],
-                ["English", "Upper-Intermediate"]
-            ];
-            languagesData.forEach(data => setFieldValues(addField('languages-fields', ['Language', 'Proficiency'], false), data));
-
-            const referencesData = [
-                ["Mr. Jose Clarence Panganiban, CC | CISSP | CGRC", "Group Head of Risk Management and Security Group | Universal Storefront Services Corporation", "+639171235268"]
-            ];
-            referencesData.forEach(data => setFieldValues(addField('references-fields', ['Name', 'Title & Company', 'Contact']), data));
-
-            generatePreview();
-        };
     </script>
 </body>
 </html>
