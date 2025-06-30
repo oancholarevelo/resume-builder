@@ -11,7 +11,7 @@ Created by **Oliver Revelo**. For support, please contact [oancholarevelo@gmail.
 
 ---
 
-![Resume Builder Screenshot]([https://i.imgur.com/your-screenshot.png](https://imgur.com/a/Aqr5jhF))
+![Resume Builder Screenshot]([https://imgur.com/a/Aqr5jhF])
 
 ## 🚀 Features
 
