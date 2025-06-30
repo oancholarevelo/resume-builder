@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .form-section-title {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        #resume-preview {
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            min-height: 792px;
+        }
+        .preview-section-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: #111827;
+            border-bottom: 2px solid #d1d5db;
+            padding-bottom: 4px;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="bg-slate-800 text-gray-200 text-sm text-center p-2 w-full">
+        This website is made by Oliver Revelo. For support, contact <a href="mailto:oancholarevelo@gmail.com" class="underline hover:text-blue-400">oancholarevelo@gmail.com</a>.
+    </div>
+
+    <div class="container mx-auto p-4 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h1 class="text-3xl font-bold mb-6 text-center text-gray-900">Resume Builder</h1>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Personal Information</h2>
+                    <input type="text" id="name" placeholder="Full Name" class="w-full p-2 border rounded mb-2" value="Oliver Revelo">
+                    <input type="text" id="address" placeholder="City, Country" class="w-full p-2 border rounded mb-2" value="Rizal, Philippines">
+                    <input type="text" id="phone" placeholder="Phone Number" class="w-full p-2 border rounded mb-2" value="(63) 947 533 7630">
+                    <input type="email" id="email" placeholder="Email Address" class="w-full p-2 border rounded" value="oancholarevelo@gmail.com">
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Styling</h2>
+                    <label for="font-select" class="block mb-2 font-medium text-gray-700">Choose a Font Family:</label>
+                    <select id="font-select" class="w-full p-2 border rounded bg-white">
+                        <option value="helvetica">Modern (Sans-Serif)</option>
+                        <option value="times">Classic (Serif)</option>
+                        <option value="courier">Typewriter (Monospace)</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Objective</h2>
+                    <textarea id="objective" placeholder="Your career objective..." class="w-full p-2 border rounded h-24">A highly versatile Computer Engineer and Graphic/UI/UX Designer with a passion for integrating functional engineering with intuitive design. I aim to leverage my technical expertise in software development, cybersecurity, and creative design to build innovative, user-centric digital solutions that enhance user experience and drive product success.</textarea>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Education</h2>
+                    <div id="education-fields"></div>
+                    <button onclick="addField('education-fields', ['School Name', 'Degree/Course', 'Year (e.g., 2022-2025)'])" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Education</button>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Experience</h2>
+                    <div id="experience-fields"></div>
+                    <button onclick="addField('experience-fields', ['Job Title', 'Company', 'Duration (e.g., Jan 2024 - Present)', {placeholder: 'Description...', type: 'textarea'}])" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Experience</button>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Skills</h2>
+                    <div id="skills-fields"></div>
+                    <button onclick="addField('skills-fields', ['Skill Category (e.g., Programming)', 'List of skills'], false)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Skill</button>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Honors and Awards</h2>
+                    <div id="honors-fields"></div>
+                    <button onclick="addField('honors-fields', ['Honor or Award'], false)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Honor/Award</button>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">Languages</h2>
+                    <div id="languages-fields"></div>
+                    <button onclick="addField('languages-fields', ['Language', 'Proficiency'], false)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Language</button>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="form-section-title">References</h2>
+                    <div id="references-fields"></div>
+                    <button onclick="addField('references-fields', ['Reference Name', 'Title & Company', 'Contact Info'])" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Reference</button>
+                </div>
+
+                <div class="flex justify-center mt-8">
+                    <button id="preview-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Update Preview</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-200 p-4 sm:p-8 rounded-lg shadow-inner">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-700">Live Preview</h2>
+                <div id="resume-preview" class="w-full max-w-4xl mx-auto p-8 border border-gray-300">
+                    </div>
+                <div class="flex justify-center mt-8">
+                    <button id="download-pdf" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Download as PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        // --- DYNAMIC FORM FIELD FUNCTIONS ---
+        function addField(containerId, fields, isGrouped = true) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = isGrouped ? 'relative mb-4 p-4 border rounded bg-gray-50' : 'relative mb-2';
+
+            fields.forEach(f => {
+                const fieldConfig = typeof f === 'string' ? { placeholder: f, type: 'input' } : f;
+                const el = fieldConfig.type === 'textarea' ? document.createElement('textarea') : document.createElement('input');
+                el.type = fieldConfig.type === 'textarea' ? '' : 'text';
+                el.placeholder = fieldConfig.placeholder;
+                el.className = 'w-full p-2 border rounded mb-2';
+                if (fieldConfig.type === 'textarea') el.rows = 3;
+                div.appendChild(el);
+            });
+
+            const removeBtn = document.createElement('button');
+            removeBtn.innerHTML = '&times;';
+            removeBtn.className = 'absolute top-1 right-2 text-red-500 font-bold text-xl hover:text-red-700';
+            removeBtn.onclick = () => div.remove();
+            div.appendChild(removeBtn);
+
+            container.appendChild(div);
+            return div;
+        }
+
+        function setFieldValues(fieldDiv, values) {
+            const inputs = fieldDiv.querySelectorAll('input, textarea');
+            inputs.forEach((input, index) => {
+                if (values[index]) {
+                    input.value = values[index];
+                }
+            });
+        }
+
+        // --- PREVIEW GENERATION ---
+        function generatePreview() {
+            const preview = document.getElementById('resume-preview');
+            preview.innerHTML = ''; // Clear previous content
+
+            const name = document.getElementById('name').value || "Your Name";
+            const contactInfo = [
+                document.getElementById('address').value,
+                document.getElementById('phone').value,
+                document.getElementById('email').value
+            ].filter(Boolean).join(' | ');
+
+            preview.innerHTML += `<div class="text-center mb-8"><h1 class="text-4xl font-bold">${name}</h1><p class="text-md text-gray-600 mt-2">${contactInfo}</p></div>`;
+            const objective = document.getElementById('objective').value;
+            if (objective) {
+                preview.innerHTML += `<div><h2 class="preview-section-title">Objective</h2><p class="text-gray-700 text-justify">${objective}</p></div>`;
+            }
+
+            const generateSectionHTML = (containerId, title) => {
+                const items = document.querySelectorAll(`#${containerId} > div`);
+                if (items.length === 0) return '';
+                let hasContent = Array.from(items).some(item => Array.from(item.querySelectorAll('input, textarea')).some(i => i.value));
+                if (!hasContent) return '';
+
+                let html = `<h2 class="preview-section-title">${title}</h2>`;
+                let honorCounter = 1; // FIX: Define counter for honors list
+                items.forEach(item => {
+                    const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                    if (inputs.every(val => !val)) return;
+
+                    if (containerId === 'education-fields') html += `<div class="mb-3"><div class="preview-grid"><p class="font-semibold text-lg">${inputs[0] || ''}</p><p class="text-gray-500 text-sm">${inputs[2] || ''}</p></div><p class="text-gray-700">${inputs[1] || ''}</p></div>`;
+                    if (containerId === 'experience-fields') html += `<div class="mb-4"><div class="preview-grid"><h3 class="font-bold text-xl">${inputs[0] || ''}</h3><p class="text-sm text-gray-500">${inputs[2] || ''}</p></div><p class="font-semibold text-md text-gray-800">${inputs[1] || ''}</p><p class="text-gray-700 whitespace-pre-line mt-1">${inputs[3] || ''}</p></div>`;
+                    if (containerId === 'skills-fields') html += `<div class="mb-2"><span class="font-semibold">${inputs[0] || ''}:</span> <span class="text-gray-700">${inputs[1] || ''}</span></div>`;
+                    if (containerId === 'honors-fields') html += `<p class="text-gray-700 mb-1 pl-4">${honorCounter++}. ${inputs[0] || ''}</p>`;
+                    if (containerId === 'languages-fields') html += `<div class="mb-2"><span class="font-semibold">${inputs[0] || ''}: </span> <span class="text-gray-700">${inputs[1] || ''}</span></div>`;
+                    if (containerId === 'references-fields') html += `<div class="mb-3"><p class="font-semibold text-lg">${inputs[0] || ''}</p><p class="text-gray-700">${inputs[1] || ''}</p><p class="text-gray-500 text-sm">${inputs[2] || ''}</p></div>`;
+                });
+                return html;
+            }
+
+            preview.innerHTML += generateSectionHTML('education-fields', 'Education');
+            preview.innerHTML += generateSectionHTML('experience-fields', 'Experience');
+            preview.innerHTML += generateSectionHTML('skills-fields', 'Skills');
+            preview.innerHTML += generateSectionHTML('honors-fields', 'Honors and Awards');
+            preview.innerHTML += generateSectionHTML('languages-fields', 'Languages');
+            preview.innerHTML += generateSectionHTML('references-fields', 'References');
+        }
+        document.getElementById('preview-btn').addEventListener('click', generatePreview);
+
+        // --- PDF GENERATION (FULLY CORRECTED) ---
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            try {
+                const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                
+                const selectedFont = document.getElementById('font-select').value;
+
+                let y = 15;
+                const margin = 15;
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const usableWidth = pageWidth - (margin * 2);
+                const FONT_SCALE = doc.internal.scaleFactor;
+                const LINE_HEIGHT_RATIO = 1.25;
+                const COLORS = { title: '#1F2937', subtitle: '#4B5563', text: '#374151' };
+                const SIZES = { h1: 26, h2: 14, h3: 12, h4: 11, body: 10.5, small: 10 };
+
+                function checkPageBreak(requiredHeight) {
+                    if (y + requiredHeight > pageHeight - margin) {
+                        doc.addPage();
+                        y = margin;
+                    }
+                }
+
+                function getLinesHeight(lines, size) {
+                    return lines.length * size * LINE_HEIGHT_RATIO / FONT_SCALE;
+                }
+
+                function addParagraph(text, { size, style = 'normal', color = COLORS.text, align = 'left', spacing = 0, x = margin, width = usableWidth, charSpacing = 0 }) {
+                    doc.setFont(selectedFont, style).setFontSize(size).setTextColor(color);
+                    const splitWidth = align === 'justify' ? (width * 0.98) : width;
+                    const lines = doc.splitTextToSize(text, splitWidth);
+                    const height = getLinesHeight(lines, size);
+                    checkPageBreak(height);
+                    doc.text(lines, x, y, { align: align, charSpace: charSpacing, maxWidth: width });
+                    y += height + spacing;
+                }
+
+                function addSectionTitle(title) {
+                    y += 6;
+                    checkPageBreak(15);
+                    addParagraph(title, { size: SIZES.h2, style: 'bold', color: COLORS.title });
+                    y += 1;
+                    doc.setDrawColor(220, 220, 220);
+                    doc.setLineWidth(0.2);
+                    doc.line(margin, y, pageWidth - margin, y);
+                    y += 5;
+                }
+
+                function addTwoColumnLine(left, right, leftOptions, rightOptions) {
+                    doc.setFont(selectedFont, leftOptions.style).setFontSize(leftOptions.size);
+                    const leftLines = doc.splitTextToSize(left, usableWidth * 0.7);
+                    const leftHeight = getLinesHeight(leftLines, leftOptions.size);
+                    doc.setFont(selectedFont, rightOptions.style).setFontSize(rightOptions.size);
+                    const rightLines = doc.splitTextToSize(right, usableWidth * 0.3);
+                    const rightHeight = getLinesHeight(rightLines, rightOptions.size);
+                    const maxHeight = Math.max(leftHeight, rightHeight);
+                    checkPageBreak(maxHeight);
+                    doc.setFont(selectedFont, leftOptions.style).setFontSize(leftOptions.size).setTextColor(leftOptions.color);
+                    doc.text(leftLines, margin, y);
+                    doc.setFont(selectedFont, rightOptions.style).setFontSize(rightOptions.size).setTextColor(rightOptions.color);
+                    doc.text(rightLines, pageWidth - margin, y, { align: 'right' });
+                    y += maxHeight;
+                }
+
+                // 1. HEADER
+                const name = document.getElementById('name').value || "Your Name";
+                doc.setFont(selectedFont, 'bold').setFontSize(SIZES.h1).setTextColor(COLORS.title);
+                doc.text(name, pageWidth / 2, y, { align: 'center' });
+                y += 9;
+                const contactInfo = [document.getElementById('address').value, document.getElementById('phone').value, document.getElementById('email').value].filter(Boolean).join(' | ');
+                doc.setFont(selectedFont, 'normal').setFontSize(SIZES.small).setTextColor(COLORS.subtitle);
+                doc.text(contactInfo, pageWidth / 2, y, { align: 'center' });
+                y += 8;
+
+                // 2. OBJECTIVE
+                const objective = document.getElementById('objective').value;
+                if (objective) {
+                    addSectionTitle('Objective');
+                    addParagraph(objective, { size: SIZES.body, spacing: 3, align: 'justify' });
+                }
+
+                // 3. SECTIONS PROCESSOR
+                function processSection(containerId, title, processorFn) {
+                    const items = Array.from(document.querySelectorAll(`#${containerId} > div`)).filter(item => Array.from(item.querySelectorAll('input, textarea')).some(i => i.value));
+                    if (items.length > 0) {
+                        addSectionTitle(title);
+                        processorFn(items);
+                    }
+                }
+
+                // 4. SECTION-SPECIFIC RENDERERS
+                processSection('education-fields', 'Education', (items) => {
+                    items.forEach(item => {
+                        const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                        addTwoColumnLine(inputs[0], inputs[2], { size: SIZES.h4, style: 'bold', color: COLORS.title }, { size: SIZES.small, style: 'normal', color: COLORS.subtitle });
+                        addParagraph(inputs[1], { size: SIZES.body, style: 'italic', spacing: 4, color: COLORS.subtitle });
+                    });
+                });
+
+                processSection('experience-fields', 'Experience', (items) => {
+                    items.forEach(item => {
+                        const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                        addTwoColumnLine(inputs[0], inputs[2], { size: SIZES.h3, style: 'bold', color: COLORS.title }, { size: SIZES.small, style: 'normal', color: COLORS.subtitle });
+                        addParagraph(inputs[1], { size: SIZES.h4, style: 'italic', color: COLORS.subtitle, spacing: 2 });
+                        addParagraph(inputs[3], { size: SIZES.body, spacing: 5 });
+                    });
+                });
+
+                processSection('skills-fields', 'Skills', (items) => {
+                    doc.setFont(selectedFont, 'bold').setFontSize(SIZES.body);
+                    let maxCategoryWidth = 0;
+                    items.forEach(item => {
+                        const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                        const category = inputs[0] ? `${inputs[0]}: ` : '';
+                        const width = doc.getTextWidth(category);
+                        if (width > maxCategoryWidth) maxCategoryWidth = width;
+                    });
+                    const skillsX = margin + maxCategoryWidth + 2;
+                    const skillsWidth = pageWidth - skillsX - margin;
+                    items.forEach(item => {
+                        const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                        const category = inputs[0] ? `${inputs[0]}: ` : '';
+                        const skills = inputs[1] || '';
+                        doc.setFont(selectedFont, 'normal').setFontSize(SIZES.body);
+                        const skillLines = doc.splitTextToSize(skills, skillsWidth);
+                        const blockHeight = getLinesHeight(skillLines, SIZES.body);
+                        checkPageBreak(blockHeight + 3);
+                        doc.setFont(selectedFont, 'bold').setFontSize(SIZES.body).setTextColor(COLORS.title);
+                        doc.text(category, margin, y);
+                        doc.setFont(selectedFont, 'normal').setFontSize(SIZES.body).setTextColor(COLORS.text);
+                        doc.text(skillLines, skillsX, y);
+                        y += blockHeight + 3;
+                    });
+                });
+
+                // FIX: Use 'index' parameter here
+                processSection('honors-fields', 'Honors and Awards', (items) => {
+                    items.forEach((item, index) => { 
+                        const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                        addParagraph(`${index + 1}. ${inputs[0]}`, { size: SIZES.body, spacing: 2, x: margin + 5, width: usableWidth - 5 });
+                    });
+                });
+
+                processSection('languages-fields', 'Languages', (items) => {
+                    items.forEach(item => {
+                        const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                        y += 2;
+                        const langText = `${inputs[0]}: `;
+                        doc.setFont(selectedFont, 'bold').setFontSize(SIZES.body).setTextColor(COLORS.title);
+                        doc.text(langText, margin, y);
+                        doc.setFont(selectedFont, 'normal').setFontSize(SIZES.body).setTextColor(COLORS.text);
+                        doc.text(inputs[1], margin + doc.getTextWidth(langText) + 2, y);
+                        y += 5;
+                    });
+                });
+
+                processSection('references-fields', 'References', (items) => {
+                    items.forEach(item => {
+                        const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
+                        addParagraph(inputs[0], { size: SIZES.h4, style: 'bold', color: COLORS.title, spacing: 1 });
+                        addParagraph(inputs[1], { size: SIZES.body, color: COLORS.text, spacing: 1 });
+                        addParagraph(inputs[2], { size: SIZES.small, style: 'italic', color: COLORS.subtitle, spacing: 4 });
+                    });
+                });
+
+                doc.save(`${(name || 'resume').toLowerCase().replace(/ /g, '_')}.pdf`);
+            } catch (error) {
+                console.error("Failed to generate PDF:", error);
+                alert("An error occurred while generating the PDF. Please check the console for details.");
+            }
+        });
+
+        // --- INITIAL DATA SETUP ---
+        window.onload = () => {
+            const educationData = [
+                ["Polytechnic University of the Philippines - Sta. Mesa, Manila", "Diploma in Computer Engineering Technology", "2022-2025"],
+                ["Asian Institute of Computer Studies - Montalban, Rizal", "Information and Communication Technology", "2020-2022"],
+                ["Kasiglahan Village National High School", "Junior High School", "2016-2020"]
+            ];
+            educationData.forEach(data => setFieldValues(addField('education-fields', ['School Name', 'Degree/Course', 'Year']), data));
+
+            const experienceData = [
+                ["Senior Graphic Designer", "ICPEP Student Edition - PUP Manila", "December 2024 - Present", "Working with the design of visual materials for organizational events, publications, and online platforms. Develop creative concepts and execute designs for a variety of media."],
+                ["UI/UX Cadet", "Google Developer Student Clubs - PUP", "November 2024 - Present", "Contributed to the design and development of user interfaces and user experiences for club projects. Collaborated with developers to create intuitive and visually appealing digital solutions."],
+                ["Risk Management Information Security Group (RMISG) Intern", "Universal Storefront Services Corporation", "March 2025- May 2025", "Gained hands-on experience in cybersecurity fundamentals, including threat landscapes and security policy implementation. Deployed and secured an Ubuntu Server, configuring UFW firewall rules and implementing fail2ban for SSH protection."],
+                ["Web Development Intern", "iBuild.PH Web Solutions & Services", "July 2024-September 2024", "Contributed to web design and development projects, focusing on creating user-friendly websites. Designed website layouts, implemented features, and optimized sites for search engines (SEO) to improve visibility."]
+            ];
+            experienceData.forEach(data => setFieldValues(addField('experience-fields', ['Job Title', 'Company', 'Duration', { placeholder: 'Description...', type: 'textarea' }]), data));
+
+            const skillsData = [
+                ["Programming", "HTML, CSS, JavaScript, Bootstrap, Tailwind, Java, Python, SQL"],
+                ["Cybersecurity", "Vulnerability Assessment, Penetration Testing, Network Security, Firewall Configuration (UFW), Intrusion Detection (fail2ban), SIEM (Flare), Security Tools (Crowdstrike, Kaspersky, WP Scan, OpenVAS)"],
+                ["Applications", "Adobe Photoshop, Adobe Illustrator, Figma, Visual Studio Code, Eclipse IDE, Canva, Capcut"],
+                ["Platforms", "Windows, Linux, iOS"]
+            ];
+            skillsData.forEach(data => setFieldValues(addField('skills-fields', ['Category', 'Skills'], false), data));
+
+            const honorsData = [
+                ["TESDA National Certificate II in Computer Systems Servicing (CSS)"],
+                ["President Lister | Polytechnic University of the Philippines (Multiple Semesters)"]
+            ];
+            honorsData.forEach(data => setFieldValues(addField('honors-fields', ['Honor or Award'], false), data));
+
+            const languagesData = [
+                ["Tagalog", "Native"],
+                ["English", "Upper-Intermediate"]
+            ];
+            languagesData.forEach(data => setFieldValues(addField('languages-fields', ['Language', 'Proficiency'], false), data));
+
+            const referencesData = [
+                ["Mr. Jose Clarence Panganiban, CC | CISSP | CGRC", "Group Head of Risk Management and Security Group | Universal Storefront Services Corporation", "+639171235268"]
+            ];
+            referencesData.forEach(data => setFieldValues(addField('references-fields', ['Name', 'Title & Company', 'Contact']), data));
+
+            generatePreview();
+        };
+    </script>
+</body>
+</html>
