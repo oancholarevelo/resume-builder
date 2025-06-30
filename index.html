@@ -22,7 +22,7 @@
             background: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            min-height: 792px;
+            min-height: 792px; /* A4 height in pixels at 96dpi */
         }
         .preview-section-title {
             font-weight: 700;
@@ -41,23 +41,28 @@
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
+
+    <!-- Credit and Support Note -->
     <div class="bg-slate-800 text-gray-200 text-sm text-center p-2 w-full">
         This website is made by Oliver Revelo. For support, contact <a href="mailto:oancholarevelo@gmail.com" class="underline hover:text-blue-400">oancholarevelo@gmail.com</a>.
     </div>
 
     <div class="container mx-auto p-4 md:p-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Form Section -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h1 class="text-3xl font-bold mb-6 text-center text-gray-900">Resume Builder</h1>
 
+                <!-- Personal Info -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Personal Information</h2>
-                    <input type="text" id="name" placeholder="Full Name" class="w-full p-2 border rounded mb-2" value="Oliver Revelo">
-                    <input type="text" id="address" placeholder="City, Country" class="w-full p-2 border rounded mb-2" value="Rizal, Philippines">
-                    <input type="text" id="phone" placeholder="Phone Number" class="w-full p-2 border rounded mb-2" value="(63) 947 533 7630">
-                    <input type="email" id="email" placeholder="Email Address" class="w-full p-2 border rounded" value="oancholarevelo@gmail.com">
+                    <input type="text" id="name" placeholder="Full Name" class="w-full p-2 border rounded mb-2">
+                    <input type="text" id="address" placeholder="City, Country" class="w-full p-2 border rounded mb-2">
+                    <input type="text" id="phone" placeholder="Phone Number" class="w-full p-2 border rounded mb-2">
+                    <input type="email" id="email" placeholder="Email Address" class="w-full p-2 border rounded">
                 </div>
 
+                <!-- Styling -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Styling</h2>
                     <label for="font-select" class="block mb-2 font-medium text-gray-700">Choose a Font Family:</label>
@@ -68,41 +73,48 @@
                     </select>
                 </div>
 
+                <!-- Objective -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Objective</h2>
-                    <textarea id="objective" placeholder="Your career objective..." class="w-full p-2 border rounded h-24">A highly versatile Computer Engineer and Graphic/UI/UX Designer with a passion for integrating functional engineering with intuitive design. I aim to leverage my technical expertise in software development, cybersecurity, and creative design to build innovative, user-centric digital solutions that enhance user experience and drive product success.</textarea>
+                    <textarea id="objective" placeholder="Your career objective..." class="w-full p-2 border rounded h-24"></textarea>
                 </div>
 
+                <!-- Education -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Education</h2>
                     <div id="education-fields"></div>
                     <button onclick="addField('education-fields', ['School Name', 'Degree/Course', 'Year (e.g., 2022-2025)'])" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Education</button>
                 </div>
 
+                <!-- Experience -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Experience</h2>
                     <div id="experience-fields"></div>
                     <button onclick="addField('experience-fields', ['Job Title', 'Company', 'Duration (e.g., Jan 2024 - Present)', {placeholder: 'Description...', type: 'textarea'}])" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Experience</button>
                 </div>
 
+                <!-- Skills -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Skills</h2>
                     <div id="skills-fields"></div>
                     <button onclick="addField('skills-fields', ['Skill Category (e.g., Programming)', 'List of skills'], false)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Skill</button>
                 </div>
 
+                <!-- Honors and Awards -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Honors and Awards</h2>
                     <div id="honors-fields"></div>
                     <button onclick="addField('honors-fields', ['Honor or Award'], false)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Honor/Award</button>
                 </div>
 
+                <!-- Languages -->
                 <div class="mb-6">
                     <h2 class="form-section-title">Languages</h2>
                     <div id="languages-fields"></div>
                     <button onclick="addField('languages-fields', ['Language', 'Proficiency'], false)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">Add Language</button>
                 </div>
 
+                <!-- References -->
                 <div class="mb-6">
                     <h2 class="form-section-title">References</h2>
                     <div id="references-fields"></div>
@@ -114,10 +126,12 @@
                 </div>
             </div>
 
+            <!-- Preview Section -->
             <div class="bg-gray-200 p-4 sm:p-8 rounded-lg shadow-inner">
                 <h2 class="text-2xl font-bold mb-4 text-center text-gray-700">Live Preview</h2>
                 <div id="resume-preview" class="w-full max-w-4xl mx-auto p-8 border border-gray-300">
-                    </div>
+                    <!-- Content will be generated here -->
+                </div>
                 <div class="flex justify-center mt-8">
                     <button id="download-pdf" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Download as PDF</button>
                 </div>
@@ -188,7 +202,7 @@
                 if (!hasContent) return '';
 
                 let html = `<h2 class="preview-section-title">${title}</h2>`;
-                let honorCounter = 1; // FIX: Define counter for honors list
+                let honorCounter = 1;
                 items.forEach(item => {
                     const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
                     if (inputs.every(val => !val)) return;
@@ -212,7 +226,7 @@
         }
         document.getElementById('preview-btn').addEventListener('click', generatePreview);
 
-        // --- PDF GENERATION (FULLY CORRECTED) ---
+        // --- PDF GENERATION ---
         document.getElementById('download-pdf').addEventListener('click', () => {
             try {
                 const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
@@ -348,7 +362,6 @@
                     });
                 });
 
-                // FIX: Use 'index' parameter here
                 processSection('honors-fields', 'Honors and Awards', (items) => {
                     items.forEach((item, index) => { 
                         const inputs = Array.from(item.querySelectorAll('input, textarea')).map(i => i.value);
@@ -384,6 +397,17 @@
                 alert("An error occurred while generating the PDF. Please check the console for details.");
             }
         });
+
+        // --- INITIAL DATA SETUP ---
+        window.onload = () => {
+            // Add one of each field type to show the user how it works
+            addField('education-fields', ['School Name', 'Degree/Course', 'Year (e.g., 2022-2025)']);
+            addField('experience-fields', ['Job Title', 'Company', 'Duration', {placeholder: 'Description...', type: 'textarea'}]);
+            addField('skills-fields', ['Category', 'Skills'], false);
+            
+            // Generate an initial blank preview
+            generatePreview();
+        };
     </script>
 </body>
 </html>
