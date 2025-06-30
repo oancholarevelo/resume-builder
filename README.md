@@ -11,8 +11,7 @@ Created by **Oliver Revelo**. For support, please contact [oancholarevelo@gmail.
 
 ---
 
-![Resume Builder Screenshot](https://i.imgur.com/your-screenshot.png)
-*(Note: You should take a screenshot of your application, upload it to a site like Imgur, and replace the URL above.)*
+![Resume Builder Screenshot]([https://i.imgur.com/your-screenshot.png](https://imgur.com/a/Aqr5jhF))
 
 ## 🚀 Features
 
